@@ -5,6 +5,7 @@ import java.io.*;
 
 import java.util.Enumeration;
 import java.io.IOException;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * This class provides the utilities to read the data exchanged via USB port.
@@ -47,7 +48,7 @@ public class USBComm implements SerialPortEventListener {
         while (portList.hasMoreElements()) {
             portId = (CommPortIdentifier) portList.nextElement();
             if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                System.out.println.info(portId.getName());
+                System.out.println(portId.getName());
                 if (portId.getName().equals(port)) {
                     System.out.println("Found port: " + port);
                     portFound = true;
@@ -99,7 +100,7 @@ public class USBComm implements SerialPortEventListener {
             inputStream.close();
             outputStream.close();
         } catch (IOException e) {
-            System.err.println("Cannot close streams:" + e.getMessage(), e);
+            System.err.println("Cannot close streams:" + e.getMessage());
         }
     }
 
