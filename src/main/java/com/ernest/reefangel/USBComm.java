@@ -39,7 +39,7 @@ public class USBComm implements SerialPortEventListener {
      */
     public USBComm() throws IOException {
         receivedBytes = new LinkedBlockingQueue<Byte>(100000);
-        String port = "COM1"; //place the right COM port here, OS dependent
+        String port = "/dev/ttyUSB0"; //place the right COM port here, OS dependent
 
         //Check that the USB port exists and is recognized:
         Enumeration<?> portList = CommPortIdentifier.getPortIdentifiers();
@@ -87,6 +87,7 @@ public class USBComm implements SerialPortEventListener {
             serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
 
             System.out.println("setted SerialPortParams");
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
             throw new IOException(e.getMessage());
