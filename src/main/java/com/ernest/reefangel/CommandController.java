@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created by ernest on 2017/01/07.
  */
@@ -29,8 +32,7 @@ public class CommandController {
     }
 
     @RequestMapping(path = "/command/{value}", method = RequestMethod.GET)
-    @ResponseStatus(code = HttpStatus.OK)
-    public String command(@PathVariable String value) throws InterruptedException {
+    public String command(@PathVariable String value) throws InterruptedException, IOException {
         return commandService.custom(value);
     }
 

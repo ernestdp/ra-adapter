@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.util.Enumeration;
 
-@Component
 public class USBPort implements SerialPortEventListener {
 
     SerialPort serialPort;
@@ -29,15 +28,14 @@ public class USBPort implements SerialPortEventListener {
      * converting the bytes into characters
      * making the displayed results codepage independent
      */
-    private InputStream input;
+    private BufferedReader input;
     /** The output stream to the port */
     private OutputStream output;
     /** Milliseconds to block while waiting for port open */
     private static final int TIME_OUT = 2000;
     /** Default bits per second for COM port. */
     private static final int DATA_RATE = 57600;
-    private final int COM_TIMEOUT=1000;
-    private String response;
+    private final int COM_TIMEOUT=10000;
 
     public USBPort() {
         //System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
@@ -76,7 +74,7 @@ public class USBPort implements SerialPortEventListener {
 
 
             // open the streams
-            input = serialPort.getInputStream();
+            input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
             output = serialPort.getOutputStream();
 
 
@@ -103,29 +101,17 @@ public class USBPort implements SerialPortEventListener {
      * Handle an event on the serial port. Read the data and print it.
      */
     public synchronized void serialEvent(SerialPortEvent evnt) {
-        switch(evnt.getEventType())
-        {
-            case SerialPortEvent.DATA_AVAILABLE :
-                readBuff = new byte[1024];
-
-                try
-                {
-                    if(input.available() > 0)
-                    {
-                        numOfBytes = input.read(readBuff);
-                        System.out.println("Received " + numOfBytes + " Bytes");
-                        serialResponse = new String(new String(readBuff,0,numOfBytes));
-                        System.out.println(serialResponse);
-                    }
-                }
-                catch(IOException ex)
-                {
-                    System.out.println("IO Exceptioon reading serial response: " + ex.getMessage());
-                    numOfBytes = 0;
-                    serialResponse = "";
-                }
-                break;
+        System.out.println("fresh event");
+        if (evnt.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+            try {
+                String inputLine=input.readLine();
+                serialResponse=inputLine;
+                System.out.println(inputLine);
+            } catch (Exception e) {
+                System.err.println(e.toString());
+            }
         }
+        // Ignore all the other eventTypes, but you should consider the other ones.
     }
 
 
@@ -135,13 +121,14 @@ public class USBPort implements SerialPortEventListener {
             System.out.printf("command %s%n", command);
             try {
                 output.write(command.getBytes());
+                output.flush();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
         }
         try {
-            Thread.sleep(8000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

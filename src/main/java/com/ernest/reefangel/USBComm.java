@@ -1,6 +1,8 @@
 package com.ernest.reefangel;
 
 import gnu.io.*;
+import org.springframework.stereotype.Component;
+
 import java.io.*;
 
 import java.util.Enumeration;
@@ -10,6 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * This class provides the utilities to read the data exchanged via USB port.
  */
+@Component
 public class USBComm implements SerialPortEventListener {
 
     /**
@@ -33,18 +36,25 @@ public class USBComm implements SerialPortEventListener {
      */
     protected LinkedBlockingQueue<Byte> receivedBytes;
 
+
+    String port = "/dev/ttyUSB0"; //place the right COM port here, OS dependent
+
+    CommPortIdentifier portId = null;
+
+
     /**
      * Builds a new manager for the communication via USB port.
      * @exception IOException if an error occurred during the opening of the USB port
      */
     public USBComm() throws IOException {
         receivedBytes = new LinkedBlockingQueue<Byte>(100000);
-        String port = "/dev/ttyUSB0"; //place the right COM port here, OS dependent
+        identifyPort();
+    }
 
+    public void identifyPort() throws IOException {
         //Check that the USB port exists and is recognized:
         Enumeration<?> portList = CommPortIdentifier.getPortIdentifiers();
         boolean portFound = false;
-        CommPortIdentifier portId = null;
         while (portList.hasMoreElements()) {
             portId = (CommPortIdentifier) portList.nextElement();
             if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
@@ -56,44 +66,33 @@ public class USBComm implements SerialPortEventListener {
                 }
             }
         }
-
         if (!portFound)
             throw new IOException("port " + port + " not found.");
+        connect();
+    }
 
+    public void connect() throws IOException {
         try {
             System.out.println("USB port opening...");
-            serialPort = (SerialPort) portId.open("USBCommunicator", PORT_TIMEOUT);
+            serialPort = (SerialPort) portId.open(this.getClass().getName(), PORT_TIMEOUT);
             System.out.println("USB port opened");
             inputStream = serialPort.getInputStream();
             outputStream = serialPort.getOutputStream();
             serialPort.addEventListener(this);
             serialPort.notifyOnDataAvailable(true);
-            //#==================================================================#
-            // WARNING! - DO NOT SET THE FOLLOWING PROPERTY WITH RXTX LIBRARY, IT
-            // 			  CAUSES A PROGRAM LOCK:
-            // 	serialPort.notifyOnOutputEmpty(true);
-            //#==================================================================#
 
-            //wait for a while to leave the time to javax.comm to
-            //correctly configure the port:
             Thread.sleep(1000);
-
-            int baudRate = 115200; //set propertly
-            serialPort.setSerialPortParams(baudRate,
+            serialPort.setSerialPortParams(57600,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
-
             serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
-
             System.out.println("setted SerialPortParams");
-
         } catch (Exception e) {
             System.err.println(e.getMessage());
             throw new IOException(e.getMessage());
         }
     }
-
 
     public void closeUSB(){
         //close the streams for serial port:
@@ -111,21 +110,7 @@ public class USBComm implements SerialPortEventListener {
      * @param event new event occurred on the USB port
      */
     public void serialEvent(SerialPortEvent event){
-        switch (event.getEventType()) {
-
-            case SerialPortEvent.BI:
-            case SerialPortEvent.OE:
-            case SerialPortEvent.FE:
-            case SerialPortEvent.PE:
-            case SerialPortEvent.CD:
-            case SerialPortEvent.CTS:
-            case SerialPortEvent.DSR:
-            case SerialPortEvent.RI:
-            case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
-                //nothing to do...
-                break;
-
-            case SerialPortEvent.DATA_AVAILABLE:
+        if(event.getEventType()==SerialPortEvent.DATA_AVAILABLE){
                 byte received = -1;
                 do {
                     try {
@@ -144,8 +129,6 @@ public class USBComm implements SerialPortEventListener {
                         }
                     }
                 } while(received != -1);
-
-                break;
         }
     }
 
