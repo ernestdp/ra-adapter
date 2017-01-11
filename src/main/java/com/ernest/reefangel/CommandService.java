@@ -1,14 +1,12 @@
 package com.ernest.reefangel;
 
+import com.ernest.reefangel.domain.RA;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by ernest on 2017/01/07.
@@ -38,20 +36,23 @@ public class CommandService {
         usbComm.receivedBytes.clear();
     }
 
-    public String custom(String value) {
+    public RA statusAll() {
+        usbComm.receivedBytes.clear();
         byte[] bytes = new byte[1024];
 
         try {
-            usbComm.write(new String("GET /" + value +" ").getBytes("UTF-8"));
+            usbComm.write(new String("GET /sa ").getBytes("UTF-8"));
         int i=0;
         while(true) {
-            System.out.println(new Date());
             final Byte take = usbComm.receivedBytes.take();
             bytes[++i]=take;
             String s = new String(bytes);
-            System.out.println(s);
             if(s.trim().contains("<RA>") && s.trim().contains(("</RA>"))){
-                return s.substring(s.indexOf("<RA>"),s.indexOf("</RA>"));
+                String substring = s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>"))+5);
+                System.out.println(substring);
+                ObjectMapper mapper = new XmlMapper();
+                RA ra = mapper.readValue(substring, RA.class);
+                return ra;
             }
         }
         } catch (IOException e) {
@@ -59,6 +60,20 @@ public class CommandService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return new String(bytes);
+        return null;
+    }
+
+    public void waterChange() {
+        usbComm.write(new String("GET /mw ").getBytes());
+        usbComm.receivedBytes.clear();
+    }
+
+    public void clear() {
+        usbComm.write(new String("GET /mt ").getBytes());//ATO
+        usbComm.write(new String("GET /mo ").getBytes());//OVERHEAT
+        usbComm.write(new String("GET /ml ").getBytes());//LEAK
+        usbComm.write(new String("GET /mt ").getBytes());
+        usbComm.receivedBytes.clear();
+
     }
 }

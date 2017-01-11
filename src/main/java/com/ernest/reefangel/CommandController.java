@@ -1,17 +1,16 @@
 package com.ernest.reefangel;
 
+import com.ernest.reefangel.domain.RA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by ernest on 2017/01/07.
  */
 @RestController
-@RequestMapping(path = "reef")
 public class CommandController {
 
 
@@ -24,16 +23,17 @@ public class CommandController {
     }
 
 
-    @RequestMapping(path = "/feed/{flag}", method = RequestMethod.GET)
+    @RequestMapping(path = "/feed", method = RequestMethod.GET)
     @ResponseStatus(code = HttpStatus.OK)
-    public void feedMode(@PathVariable boolean flag)
+    public void feedMode()
     {
         commandService.feed();
     }
 
-    @RequestMapping(path = "/command/{value}", method = RequestMethod.GET)
-    public String command(@PathVariable String value) throws InterruptedException, IOException {
-        return commandService.custom(value);
+    @RequestMapping(path = "/status/all", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
+    public RA command() throws InterruptedException, IOException {
+        return commandService.statusAll();
     }
 
 
@@ -42,5 +42,19 @@ public class CommandController {
     public void reboot()
     {
         commandService.reboot();
+    }
+
+    @RequestMapping(path = "/water", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
+    public void waterChange()
+    {
+        commandService.waterChange();
+    }
+
+    @RequestMapping(path = "/clear", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
+    public void clear()
+    {
+        commandService.clear();
     }
 }
