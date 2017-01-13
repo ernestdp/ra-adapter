@@ -1,6 +1,7 @@
 package com.ernest.reefangel.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
@@ -8,106 +9,47 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class RA {
 
-    private String id;
-    private String T1;
-    private String T2;
-    private String T3;
-    private String PH;
-    private String R;
-    private String RON;
-    private String ROFF;
-    private String ATOLOW;
-    private String ATOHIGH;
-    private String EM;
-    private String EM1;
-    private String REM;
-    private String BID;
-    private String AF;
-    private String SF;
-    private String PHE;
-    private String WL;
 
-public RA()
-{
+    @JsonProperty("ID")
+    private String ID;
+    @JsonProperty("T1")
+    private String temp1;
+    @JsonProperty("T2")
+    private String temp2;
+    @JsonProperty("T3")
+    private String temp3;
+    @JsonProperty("PH")
+    private String ph;
+    @JsonProperty("R")
+    private String r;
+    @JsonProperty("RON")
+    private String relayOn;
+    @JsonProperty("ROFF")
+    private String relayOFF;
+    @JsonProperty("ATOLOW")
+    private String atoLOW;
+    @JsonProperty("ATOHIGH")
+    private String atoHIGH;
+    @JsonProperty("EM")
+    private String em;
+    @JsonProperty("EM1")
+    private String em1;
+    @JsonProperty("REM")
+    private String rem;
+    @JsonProperty("BID")
+    private String bid;
+    @JsonProperty("AF")
+    private String af;
+    @JsonProperty("SF")
+    private String sf;
+    @JsonProperty("PHE")
+    private String phe;
+    @JsonProperty("WL")
+    private String waterLevel;
 
-}
+    public RA()
+    {
 
-
-
-    public String getT1() {
-        return T1;
-    }
-
-    public String getT2() {
-        return T2;
-    }
-
-    public String getT3() {
-        return T3;
-    }
-
-    public String getPH() {
-        return PH;
-    }
-
-    public String getR() {
-        return R;
-    }
-
-    public String getRON() {
-        return RON;
-    }
-
-    public String getROFF() {
-        return ROFF;
-    }
-
-    public String getATOLOW() {
-        return ATOLOW;
-    }
-
-    public String getATOHIGH() {
-        return ATOHIGH;
-    }
-
-    public String getEM() {
-        return EM;
-    }
-
-    public String getEM1() {
-        return EM1;
-    }
-
-    public String getREM() {
-        return REM;
-    }
-
-    public String getBID() {
-        return BID;
-    }
-
-    public String getAF() {
-        return AF;
-    }
-
-    public String getSF() {
-        return SF;
-    }
-
-    public String getPHE() {
-        return PHE;
-    }
-
-    public String getWL() {
-        return WL;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }
 

@@ -1,6 +1,9 @@
 package com.ernest.reefangel;
 
 import com.ernest.reefangel.domain.RA;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +54,8 @@ public class CommandService {
                 String substring = s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>"))+5);
                 System.out.println(substring);
                 ObjectMapper mapper = new XmlMapper();
+              //  mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                //        .configure(DeserializationFeature.EAGER_DESERIALIZER_FETCH,false);
                 RA ra = mapper.readValue(substring, RA.class);
                 return ra;
             }

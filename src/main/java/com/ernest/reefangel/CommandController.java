@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.lang.invoke.MethodType;
 
 /**
  * Created by ernest on 2017/01/07.
@@ -30,9 +31,9 @@ public class CommandController {
         commandService.feed();
     }
 
-    @RequestMapping(path = "/status/all", method = RequestMethod.GET)
+    @RequestMapping(path = "/status/all", method = RequestMethod.GET,   produces = {"application/json", "application/xml" })
     @ResponseStatus(code = HttpStatus.OK)
-    public RA command() throws InterruptedException, IOException {
+    public RA statusAll() throws InterruptedException, IOException {
         return commandService.statusAll();
     }
 
