@@ -2,7 +2,8 @@ package com.ernest.reefangel.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+import static com.ernest.reefangel.domain.Fields.*;
 
 /**
  * Created by ernest on 2017/01/11.
@@ -10,46 +11,119 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public class RA {
 
 
-    @JsonProperty("ID")
-    private String ID;
-    @JsonProperty("T1")
+    @JsonProperty(ID)
+    private String id;
+    @JsonProperty(T1)
     private String temp1;
-    @JsonProperty("T2")
+    @JsonProperty(T2)
     private String temp2;
-    @JsonProperty("T3")
+    @JsonProperty(T3)
     private String temp3;
-    @JsonProperty("PH")
+    @JsonProperty(PH)
     private String ph;
-    @JsonProperty("R")
+    @JsonProperty(R)
     private String r;
-    @JsonProperty("RON")
+    @JsonProperty(RON)
     private String relayOn;
-    @JsonProperty("ROFF")
+    @JsonProperty(ROFF)
     private String relayOFF;
-    @JsonProperty("ATOLOW")
+    @JsonProperty(ATOLOW)
     private String atoLOW;
-    @JsonProperty("ATOHIGH")
+    @JsonProperty(ATOHIGH)
     private String atoHIGH;
-    @JsonProperty("EM")
+    @JsonProperty(EM)
     private String em;
-    @JsonProperty("EM1")
+    @JsonProperty(EM1)
     private String em1;
-    @JsonProperty("REM")
+    @JsonProperty(REM)
     private String rem;
-    @JsonProperty("BID")
+    @JsonProperty(BID)
     private String bid;
-    @JsonProperty("AF")
+    @JsonProperty(AF)
     private String af;
-    @JsonProperty("SF")
+    @JsonProperty(SF)
     private String sf;
-    @JsonProperty("PHE")
+    @JsonProperty(PHE)
     private String phe;
-    @JsonProperty("WL")
+    @JsonProperty(WL)
     private String waterLevel;
 
     public RA()
     {
 
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getTemp1() {
+        return temp1;
+    }
+
+    public String getTemp2() {
+        return temp2;
+    }
+
+    public String getTemp3() {
+        return temp3;
+    }
+
+    public String getPh() {
+        return ph;
+    }
+
+    public String getR() {
+        return r;
+    }
+
+    public String getRelayOn() {
+        return relayOn;
+    }
+
+    public String getRelayOFF() {
+        return relayOFF;
+    }
+
+    public String getAtoLOW() {
+        return atoLOW;
+    }
+
+    public String getAtoHIGH() {
+        return atoHIGH;
+    }
+
+    public String getEm() {
+        return em;
+    }
+
+    public String getEm1() {
+        return em1;
+    }
+
+    public String getRem() {
+        return rem;
+    }
+
+    public String getBid() {
+        return bid;
+    }
+
+    public String getAf() {
+        return af;
+    }
+
+    public String getSf() {
+        return sf;
+    }
+
+    public String getPhe() {
+        return phe;
+    }
+
+    public String getWaterLevel() {
+        return waterLevel;
+    }
+
 }
 

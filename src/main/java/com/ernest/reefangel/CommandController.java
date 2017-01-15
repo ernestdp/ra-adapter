@@ -37,7 +37,6 @@ public class CommandController {
         return commandService.statusAll();
     }
 
-
     @RequestMapping(path = "/reboot", method = RequestMethod.GET)
     @ResponseStatus(code = HttpStatus.OK)
     public void reboot()
