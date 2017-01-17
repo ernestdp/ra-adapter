@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.invoke.MethodType;
 
 /**
@@ -57,4 +58,19 @@ public class CommandController {
     {
         commandService.clear();
     }
+
+    @RequestMapping(path = "/{command}", method = RequestMethod.GET,produces = {"text/plain"} )
+    @ResponseStatus(code = HttpStatus.OK)
+    public String command(@PathVariable String command) throws IOException, InterruptedException {
+        return commandService.command(command);
+    }
+
+
+    @RequestMapping(path = "/", method = RequestMethod.GET,produces = {"text/plain"} )
+    @ResponseStatus(code = HttpStatus.OK)
+    public String welcome() throws IOException, InterruptedException {
+        return "<h1>Reef Angel Controller Web Server</h1>";
+    }
+
+
 }
