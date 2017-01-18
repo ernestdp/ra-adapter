@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by ernest on 2017/01/07.
@@ -27,18 +26,6 @@ public class CommandService {
         this.log= Logger.getLogger(CommandService.class);
     }
 
-    public void reboot()
-    {
-        usbCommAdapter.write(new String("GET /boot ").getBytes());
-        usbCommAdapter.receivedBytes.clear();
-
-    }
-
-    public void feed()
-    {
-        usbCommAdapter.write(new String("GET /mf ").getBytes());
-        usbCommAdapter.receivedBytes.clear();
-    }
 
     public RA statusAll() throws IOException, InterruptedException {
         usbCommAdapter.receivedBytes.clear();
@@ -59,20 +46,6 @@ public class CommandService {
         }
     }
 
-    public void waterChange() {
-        usbCommAdapter.write(new String("GET /mw ").getBytes());
-        usbCommAdapter.receivedBytes.clear();
-    }
-
-    public void clear() {
-        usbCommAdapter.write(new String("GET /mt ").getBytes());//ATO
-        usbCommAdapter.write(new String("GET /mo ").getBytes());//OVERHEAT
-        usbCommAdapter.write(new String("GET /ml ").getBytes());//LEAK
-        usbCommAdapter.write(new String("GET /mt ").getBytes());
-        usbCommAdapter.receivedBytes.clear();
-
-    }
-
     public String command(String command) throws IOException, InterruptedException {
         log.info(String.format("About to submit : %s to device.", command));
         usbCommAdapter.receivedBytes.clear();
@@ -82,13 +55,32 @@ public class CommandService {
         while(true) {
             final Byte take = usbCommAdapter.receivedBytes.take();
             bytes[++i] = take;
-
             String s = new String(bytes);
-            System.out.println(s);
-
-            if ( s.trim().contains("</RA>") || s.trim().contains("</V>") || s.trim().contains("</MODE>")) {
-                System.out.println(s);
-                return s;
+            if (s.trim().contains("<RA>") && s.trim().contains("</RA>"))
+            {
+                return s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>"))+5);
+            }
+            else if(s.trim().contains("<V>") && s.trim().contains("</V>"))
+            {
+                return s.substring(s.indexOf("<V>"), (s.lastIndexOf("</V>"))+4);
+            }
+            else if(s.trim().contains("<MODE>") && s.trim().contains("</MODE>"))
+            {
+                return s.substring(s.indexOf("<MODE>"), (s.lastIndexOf("</MODE>"))+7);
+            }
+            else if(s.trim().contains("<D>") && s.trim().contains("</D>"))
+            {
+                return s.substring(s.indexOf("<D>"), (s.lastIndexOf("</D>"))+4);
+            }
+            else if(s.trim().contains("<M>") && s.trim().contains("</M>"))
+            {
+                return s.substring(s.indexOf("<M>"), (s.lastIndexOf("</M>"))+4);
+            }else if(s.trim().contains("<object") && s.trim().contains("</object>"))
+            {
+                return s.substring(s.indexOf("<object"), (s.lastIndexOf("</object>"))+9);
+            }else if(s.trim().contains("<MEM>") && s.trim().contains("</MEM>"))
+            {
+                return s.substring(s.indexOf("<MEM>"), (s.lastIndexOf("</MEM>"))+6);
             }
         }
     }
