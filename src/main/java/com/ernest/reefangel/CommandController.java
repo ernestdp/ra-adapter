@@ -21,14 +21,13 @@ public class CommandController {
     private Logger log;
 
     @Autowired
-    public CommandController(CommandService commandService)
-    {
+    public CommandController(CommandService commandService) {
         this.commandService = commandService;
-        this.log=Logger.getLogger(CommandController.class);
+        this.log = Logger.getLogger(CommandController.class);
     }
 
 
-    @RequestMapping(path = "/status", method = RequestMethod.GET,   produces = {"application/json", "application/xml" })
+    @RequestMapping(path = "/status", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     @ResponseStatus(code = HttpStatus.OK)
     public RA statusAll() throws InterruptedException, IOException {
         return commandService.statusAll();
@@ -44,7 +43,7 @@ public class CommandController {
     }
 
 
-    @RequestMapping(path = "/", method = RequestMethod.GET )
+    @RequestMapping(path = "/", method = RequestMethod.GET)
     @ResponseStatus(code = HttpStatus.OK)
     public String welcome() throws IOException, InterruptedException {
         return "<h1>Reef Angel Controller Web Server</h1>";

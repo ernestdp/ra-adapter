@@ -31,39 +31,38 @@ public class ReefAngelCloudService {
     private Logger log;
 
     @Autowired
-    public ReefAngelCloudService(CommandService commandService,RestTemplate restTemplate)
-    {
-        this.commandService=commandService;
-        this.restTemplate=restTemplate;
-        this.log= Logger.getLogger(ReefAngelCloudService.class);
+    public ReefAngelCloudService(CommandService commandService, RestTemplate restTemplate) {
+        this.commandService = commandService;
+        this.restTemplate = restTemplate;
+        this.log = Logger.getLogger(ReefAngelCloudService.class);
     }
 
-    @Scheduled( cron = "0 0/60 * * * ?" )
+    @Scheduled(cron = "0 0/60 * * * ?")
     public void uploadStatusToPortal() throws URISyntaxException, IOException, InterruptedException {
         final RA ra = commandService.statusAll();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add(ID,"linksar");
-        params.add(T1,ra.getTemp1());
-        params.add(T2,ra.getTemp2());
-        params.add(T3,ra.getTemp3());
-        params.add(R,ra.getR());
-        params.add(AF,ra.getAf());
-        params.add(ATOHIGH,ra.getAtoHIGH());
-        params.add(ATOLOW,ra.getAtoLOW());
-        params.add(BID,ra.getBid());
-        params.add(EM,ra.getEm());
-        params.add(EM1,ra.getEm1());
-        params.add(PH,ra.getPh());
-        params.add(PHE,ra.getPhe());
-        params.add(SF,ra.getSf());
-        params.add(REM,ra.getRem());
-        params.add(RON,ra.getRelayOn());
-        params.add(ROFF,ra.getRelayOFF());
+        params.add(ID, "linksar");
+        params.add(T1, ra.getTemp1());
+        params.add(T2, ra.getTemp2());
+        params.add(T3, ra.getTemp3());
+        params.add(R, ra.getR());
+        params.add(AF, ra.getAf());
+        params.add(ATOHIGH, ra.getAtoHIGH());
+        params.add(ATOLOW, ra.getAtoLOW());
+        params.add(BID, ra.getBid());
+        params.add(EM, ra.getEm());
+        params.add(EM1, ra.getEm1());
+        params.add(PH, ra.getPh());
+        params.add(PHE, ra.getPhe());
+        params.add(SF, ra.getSf());
+        params.add(REM, ra.getRem());
+        params.add(RON, ra.getRelayOn());
+        params.add(ROFF, ra.getRelayOFF());
 
         URI uri = UriComponentsBuilder.fromHttpUrl("http://forum.reefangel.com/status/submitp.aspx").queryParams(params).build().toUri();
 
-        RequestEntity requestEntity = new RequestEntity(HttpMethod.GET,uri);
+        RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, uri);
         ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
         log.info(String.format("reefangel updated remote response :  %s %s", exchange.getStatusCode(), exchange.getBody()));
     }

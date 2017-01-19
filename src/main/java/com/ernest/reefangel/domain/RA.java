@@ -48,8 +48,7 @@ public class RA {
     @JsonProperty(WL)
     private String waterLevel;
 
-    public RA()
-    {
+    public RA() {
 
     }
 

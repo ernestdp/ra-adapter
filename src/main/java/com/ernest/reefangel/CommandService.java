@@ -20,10 +20,9 @@ public class CommandService {
 
 
     @Autowired
-    public CommandService(USBCommAdapter usbCommAdapter)
-    {
+    public CommandService(USBCommAdapter usbCommAdapter) {
         this.usbCommAdapter = usbCommAdapter;
-        this.log= Logger.getLogger(CommandService.class);
+        this.log = Logger.getLogger(CommandService.class);
     }
 
 
@@ -31,13 +30,13 @@ public class CommandService {
         usbCommAdapter.receivedBytes.clear();
         usbCommAdapter.write(new String("GET /sa ").getBytes("UTF-8"));
         byte[] bytes = new byte[1024];
-        int i=0;
-        while(true) {
+        int i = 0;
+        while (true) {
             final Byte take = usbCommAdapter.receivedBytes.take();
-            bytes[++i]=take;
+            bytes[++i] = take;
             String s = new String(bytes);
-            if(s.trim().contains("<RA>") && s.trim().contains(("</RA>"))){
-                String substring = s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>"))+5);
+            if (s.trim().contains("<RA>") && s.trim().contains(("</RA>"))) {
+                String substring = s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>")) + 5);
                 System.out.println(substring);
                 ObjectMapper mapper = new XmlMapper();
                 final RA ra = mapper.readValue(substring, RA.class);
@@ -49,38 +48,27 @@ public class CommandService {
     public String command(String command) throws IOException, InterruptedException {
         log.info(String.format("About to submit : %s to device.", command));
         usbCommAdapter.receivedBytes.clear();
-        usbCommAdapter.write(new String("GET /"+command+" ").getBytes("UTF-8"));
+        usbCommAdapter.write(new String("GET /" + command + " ").getBytes("UTF-8"));
         byte[] bytes = new byte[1024];
-        int i=0;
-        while(true) {
+        int i = 0;
+        while (true) {
             final Byte take = usbCommAdapter.receivedBytes.take();
             bytes[++i] = take;
             String s = new String(bytes);
-            if (s.trim().contains("<RA>") && s.trim().contains("</RA>"))
-            {
-                return s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>"))+5);
-            }
-            else if(s.trim().contains("<V>") && s.trim().contains("</V>"))
-            {
-                return s.substring(s.indexOf("<V>"), (s.lastIndexOf("</V>"))+4);
-            }
-            else if(s.trim().contains("<MODE>") && s.trim().contains("</MODE>"))
-            {
-                return s.substring(s.indexOf("<MODE>"), (s.lastIndexOf("</MODE>"))+7);
-            }
-            else if(s.trim().contains("<D>") && s.trim().contains("</D>"))
-            {
-                return s.substring(s.indexOf("<D>"), (s.lastIndexOf("</D>"))+4);
-            }
-            else if(s.trim().contains("<M>") && s.trim().contains("</M>"))
-            {
-                return s.substring(s.indexOf("<M>"), (s.lastIndexOf("</M>"))+4);
-            }else if(s.trim().contains("<object") && s.trim().contains("</object>"))
-            {
-                return s.substring(s.indexOf("<object"), (s.lastIndexOf("</object>"))+9);
-            }else if(s.trim().contains("<MEM>") && s.trim().contains("</MEM>"))
-            {
-                return s.substring(s.indexOf("<MEM>"), (s.lastIndexOf("</MEM>"))+6);
+            if (s.trim().contains("<RA>") && s.trim().contains("</RA>")) {
+                return s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>")) + 5);
+            } else if (s.trim().contains("<V>") && s.trim().contains("</V>")) {
+                return s.substring(s.indexOf("<V>"), (s.lastIndexOf("</V>")) + 4);
+            } else if (s.trim().contains("<MODE>") && s.trim().contains("</MODE>")) {
+                return s.substring(s.indexOf("<MODE>"), (s.lastIndexOf("</MODE>")) + 7);
+            } else if (s.trim().contains("<D>") && s.trim().contains("</D>")) {
+                return s.substring(s.indexOf("<D>"), (s.lastIndexOf("</D>")) + 4);
+            } else if (s.trim().contains("<M>") && s.trim().contains("</M>")) {
+                return s.substring(s.indexOf("<M>"), (s.lastIndexOf("</M>")) + 4);
+            } else if (s.trim().contains("<object") && s.trim().contains("</object>")) {
+                return s.substring(s.indexOf("<object"), (s.lastIndexOf("</object>")) + 9);
+            } else if (s.trim().contains("<MEM>") && s.trim().contains("</MEM>")) {
+                return s.substring(s.indexOf("<MEM>"), (s.lastIndexOf("</MEM>")) + 6);
             }
         }
     }

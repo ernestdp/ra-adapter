@@ -44,7 +44,8 @@ public class USBCommAdapter implements SerialPortEventListener {
 
     /**
      * Builds a new manager for the communication via USB port.
-     * @exception IOException if an error occurred during the opening of the USB port
+     *
+     * @throws IOException if an error occurred during the opening of the USB port
      */
     public USBCommAdapter() throws IOException {
         receivedBytes = new LinkedBlockingQueue<Byte>(100000);
@@ -94,7 +95,7 @@ public class USBCommAdapter implements SerialPortEventListener {
         }
     }
 
-    public void closeUSB(){
+    public void closeUSB() {
         //close the streams for serial port:
         try {
             inputStream.close();
@@ -109,30 +110,30 @@ public class USBCommAdapter implements SerialPortEventListener {
      *
      * @param event new event occurred on the USB port
      */
-    public void serialEvent(SerialPortEvent event){
-        if(event.getEventType()==SerialPortEvent.DATA_AVAILABLE){
-                byte received = -1;
-                do {
-                    try {
-                        received = (byte)inputStream.read();
-                    } catch (IOException e) {
-                        System.err.println("Error reading USB:" + e.getMessage());
-                    }
+    public void serialEvent(SerialPortEvent event) {
+        if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+            byte received = -1;
+            do {
+                try {
+                    received = (byte) inputStream.read();
+                } catch (IOException e) {
+                    System.err.println("Error reading USB:" + e.getMessage());
+                }
 
-                    synchronized (receivedBytes) {
-                        try {
-                            receivedBytes.add(received);
-                        } catch (IllegalStateException ew) {
-                            System.err.println(ew.getMessage());
-                            receivedBytes.poll();
-                            receivedBytes.add(received);
-                        }
+                synchronized (receivedBytes) {
+                    try {
+                        receivedBytes.add(received);
+                    } catch (IllegalStateException ew) {
+                        System.err.println(ew.getMessage());
+                        receivedBytes.poll();
+                        receivedBytes.add(received);
                     }
-                } while(received != -1);
+                }
+            } while (received != -1);
         }
     }
 
-    protected void write(byte[] buffer){
+    protected void write(byte[] buffer) {
         try {
             outputStream.write(buffer);
             outputStream.flush();
