@@ -21,7 +21,7 @@ public class USBCommAdapter implements SerialPortEventListener {
     private InputStream inputStream;
     private OutputStream outputStream;
     private SerialPort serialPort;
-    protected LinkedBlockingQueue<Byte> receivedBytes;
+    public LinkedBlockingQueue<Byte> receivedBytes;
     private CommPortIdentifier portId = null;
     private Logger log;
     private final int portTimeout;
@@ -122,7 +122,7 @@ public class USBCommAdapter implements SerialPortEventListener {
         }
     }
 
-    protected void write(byte[] buffer) {
+    public void write(byte[] buffer) {
         try {
             outputStream.write(buffer);
             outputStream.flush();
