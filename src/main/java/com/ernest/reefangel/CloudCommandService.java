@@ -13,23 +13,23 @@ import java.io.IOException;
  * Created by ernest on 2017/01/07.
  */
 @Service
-public class CommandService {
+public class CloudCommandService {
 
     private USBCommAdapter usbCommAdapter;
     private Logger log;
 
 
     @Autowired
-    public CommandService(USBCommAdapter usbCommAdapter) {
+    public CloudCommandService(USBCommAdapter usbCommAdapter) {
         this.usbCommAdapter = usbCommAdapter;
-        this.log = Logger.getLogger(CommandService.class);
+        this.log = Logger.getLogger(CloudCommandService.class);
     }
 
 
     public RA statusAll() throws IOException, InterruptedException {
         usbCommAdapter.receivedBytes.clear();
         usbCommAdapter.write(new String("GET /sa ").getBytes("UTF-8"));
-        byte[] bytes = new byte[1024];
+        final byte[] bytes = new byte[1024];
         int i = 0;
         while (true) {
             final Byte take = usbCommAdapter.receivedBytes.take();
@@ -49,7 +49,7 @@ public class CommandService {
         log.info(String.format("About to submit : %s to device.", command));
         usbCommAdapter.receivedBytes.clear();
         usbCommAdapter.write(new String("GET /" + command + " ").getBytes("UTF-8"));
-        byte[] bytes = new byte[1024];
+        final byte[] bytes = new byte[1024];
         int i = 0;
         while (true) {
             final Byte take = usbCommAdapter.receivedBytes.take();

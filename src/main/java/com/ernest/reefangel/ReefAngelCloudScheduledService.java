@@ -1,9 +1,9 @@
 package com.ernest.reefangel;
 
-import com.ernest.reefangel.domain.Fields;
 import com.ernest.reefangel.domain.RA;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,25 +24,26 @@ import static com.ernest.reefangel.domain.Fields.*;
  */
 @Service
 @EnableScheduling
-public class ReefAngelCloudService {
+public class ReefAngelCloudScheduledService {
 
-    private CommandService commandService;
+    private CloudCommandService cloudCommandService;
     private RestTemplate restTemplate;
     private Logger log;
+    private String id;
 
     @Autowired
-    public ReefAngelCloudService(CommandService commandService, RestTemplate restTemplate) {
-        this.commandService = commandService;
+    public ReefAngelCloudScheduledService(CloudCommandService cloudCommandService, RestTemplate restTemplate, @Value("${reefangel.id}") String id) {
+        this.cloudCommandService = cloudCommandService;
         this.restTemplate = restTemplate;
-        this.log = Logger.getLogger(ReefAngelCloudService.class);
+        this.id = id;
+        this.log = Logger.getLogger(ReefAngelCloudScheduledService.class);
     }
 
     @Scheduled(cron = "0 0/60 * * * ?")
     public void uploadStatusToPortal() throws URISyntaxException, IOException, InterruptedException {
-        final RA ra = commandService.statusAll();
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add(ID, "linksar");
+        final RA ra = cloudCommandService.statusAll();
+        final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add(ID, id);
         params.add(T1, ra.getTemp1());
         params.add(T2, ra.getTemp2());
         params.add(T3, ra.getTemp3());
@@ -59,11 +60,9 @@ public class ReefAngelCloudService {
         params.add(REM, ra.getRem());
         params.add(RON, ra.getRelayOn());
         params.add(ROFF, ra.getRelayOFF());
-
-        URI uri = UriComponentsBuilder.fromHttpUrl("http://forum.reefangel.com/status/submitp.aspx").queryParams(params).build().toUri();
-
-        RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, uri);
-        ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
+        final URI uri = UriComponentsBuilder.fromHttpUrl("http://forum.reefangel.com/status/submitp.aspx").queryParams(params).build().toUri();
+        final RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, uri);
+        final ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
         log.info(String.format("reefangel updated remote response :  %s %s", exchange.getStatusCode(), exchange.getBody()));
     }
 }

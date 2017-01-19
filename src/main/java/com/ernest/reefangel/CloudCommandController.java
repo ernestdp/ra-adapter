@@ -7,37 +7,35 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.invoke.MethodType;
 
 /**
  * Created by ernest on 2017/01/07.
  */
 @RestController
-public class CommandController {
+public class CloudCommandController {
 
 
-    private CommandService commandService;
+    private CloudCommandService cloudCommandService;
     private Logger log;
 
     @Autowired
-    public CommandController(CommandService commandService) {
-        this.commandService = commandService;
-        this.log = Logger.getLogger(CommandController.class);
+    public CloudCommandController(CloudCommandService cloudCommandService) {
+        this.cloudCommandService = cloudCommandService;
+        this.log = Logger.getLogger(CloudCommandController.class);
     }
 
 
     @RequestMapping(path = "/status", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     @ResponseStatus(code = HttpStatus.OK)
     public RA statusAll() throws InterruptedException, IOException {
-        return commandService.statusAll();
+        return cloudCommandService.statusAll();
     }
 
 
     @RequestMapping(path = "/{command}", method = RequestMethod.GET)
     @ResponseStatus(code = HttpStatus.OK)
     public String command(@PathVariable String command) throws IOException, InterruptedException {
-        String response = commandService.command(command);
+        String response = cloudCommandService.command(command);
         log.info(response);
         return response;
     }

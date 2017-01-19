@@ -1,6 +1,10 @@
 package com.ernest.reefangel;
 
 import gnu.io.*;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -15,53 +19,39 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Component
 public class USBCommAdapter implements SerialPortEventListener {
 
-    /**
-     * Stream for the storage of incoming data
-     */
     private InputStream inputStream;
-    /**
-     * Stream for the dispatching of data
-     */
     private OutputStream outputStream;
-    /**
-     * Timeout of the USB port
-     */
-    private final int PORT_TIMEOUT = 2000;
-    /**
-     * Representation of the serial port used for the communication
-     */
     private SerialPort serialPort;
-    /**
-     * Buffer that stores the received bytes from the media
-     */
     protected LinkedBlockingQueue<Byte> receivedBytes;
-
-
-    String port = "/dev/ttyUSB0"; //place the right COM port here, OS dependent
-
-    CommPortIdentifier portId = null;
-
+    private CommPortIdentifier portId = null;
+    private Logger log;
+    private final int portTimeout;
+    private final String port;
+    private final int baudRate;
 
     /**
      * Builds a new manager for the communication via USB port.
      *
      * @throws IOException if an error occurred during the opening of the USB port
      */
-    public USBCommAdapter() throws IOException {
+    @Autowired
+    public USBCommAdapter(@Value("${usb.port}") String port, @Value("${usb.port.timeout}") int portTimeout, @Value("${usb.baudrate}") int baudRate) throws IOException {
+        this.portTimeout = portTimeout;
+        this.port = port;
+        this.baudRate = baudRate;
+        log = Logger.getLogger(USBCommAdapter.class);
         receivedBytes = new LinkedBlockingQueue<Byte>(100000);
         identifyPort();
     }
 
     public void identifyPort() throws IOException {
-        //Check that the USB port exists and is recognized:
         Enumeration<?> portList = CommPortIdentifier.getPortIdentifiers();
         boolean portFound = false;
         while (portList.hasMoreElements()) {
             portId = (CommPortIdentifier) portList.nextElement();
             if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                System.out.println(portId.getName());
                 if (portId.getName().equals(port)) {
-                    System.out.println("Found port: " + port);
+                    log.info("Found port: " + port);
                     portFound = true;
                     break;
                 }
@@ -74,34 +64,34 @@ public class USBCommAdapter implements SerialPortEventListener {
 
     public void connect() throws IOException {
         try {
-            System.out.println("USB port opening...");
-            serialPort = (SerialPort) portId.open(this.getClass().getName(), PORT_TIMEOUT);
-            System.out.println("USB port opened");
+            log.info("USB port opening...");
+            serialPort = (SerialPort) portId.open(this.getClass().getName(), portTimeout);
+            log.info("USB port opened");
             inputStream = serialPort.getInputStream();
             outputStream = serialPort.getOutputStream();
             serialPort.addEventListener(this);
             serialPort.notifyOnDataAvailable(true);
 
             Thread.sleep(1000);
-            serialPort.setSerialPortParams(57600,
+            serialPort.setSerialPortParams(baudRate,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
             serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
-            System.out.println("setted SerialPortParams");
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            log.error(e.getMessage());
             throw new IOException(e.getMessage());
         }
     }
 
     public void closeUSB() {
-        //close the streams for serial port:
         try {
             inputStream.close();
             outputStream.close();
         } catch (IOException e) {
-            System.err.println("Cannot close streams:" + e.getMessage());
+            final String error = String.format("Cannot close streams for port : %s", port);
+            log.error(error + e.getMessage());
+            throw new RuntimeException(error, e);
         }
     }
 
@@ -117,14 +107,14 @@ public class USBCommAdapter implements SerialPortEventListener {
                 try {
                     received = (byte) inputStream.read();
                 } catch (IOException e) {
-                    System.err.println("Error reading USB:" + e.getMessage());
+                    log.error("Error reading USB:" + e.getMessage());
                 }
 
                 synchronized (receivedBytes) {
                     try {
                         receivedBytes.add(received);
                     } catch (IllegalStateException ew) {
-                        System.err.println(ew.getMessage());
+                        log.error(ew.getMessage());
                         receivedBytes.poll();
                         receivedBytes.add(received);
                     }
@@ -138,7 +128,9 @@ public class USBCommAdapter implements SerialPortEventListener {
             outputStream.write(buffer);
             outputStream.flush();
         } catch (IOException e) {
-            System.err.println("Cannot write:" + e.getMessage());
+            final String error = String.format("Unable to write to %s", port);
+            log.error("Cannot write:" + e.getMessage());
+            throw new RuntimeException(error, e);
         }
     }
 }
