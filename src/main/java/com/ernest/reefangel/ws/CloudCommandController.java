@@ -1,6 +1,7 @@
-package com.ernest.reefangel;
+package com.ernest.reefangel.ws;
 
 import com.ernest.reefangel.domain.RA;
+import com.ernest.reefangel.service.CloudCommandService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

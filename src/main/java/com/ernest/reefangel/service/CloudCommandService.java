@@ -1,5 +1,6 @@
-package com.ernest.reefangel;
+package com.ernest.reefangel.service;
 
+import com.ernest.reefangel.adapters.USBCommAdapter;
 import com.ernest.reefangel.domain.RA;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;

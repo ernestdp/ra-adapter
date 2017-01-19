@@ -1,10 +1,9 @@
-package com.ernest.reefangel;
+package com.ernest.reefangel.adapters;
 
 import gnu.io.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.*;

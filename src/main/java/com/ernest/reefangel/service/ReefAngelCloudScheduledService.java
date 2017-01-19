@@ -1,4 +1,4 @@
-package com.ernest.reefangel;
+package com.ernest.reefangel.service;
 
 import com.ernest.reefangel.domain.RA;
 import org.apache.log4j.Logger;
