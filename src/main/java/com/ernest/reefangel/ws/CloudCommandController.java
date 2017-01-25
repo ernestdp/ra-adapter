@@ -47,6 +47,4 @@ public class CloudCommandController {
     public String welcome() throws IOException, InterruptedException {
         return "<h1>Reef Angel Controller Web Server</h1>";
     }
-
-
 }
