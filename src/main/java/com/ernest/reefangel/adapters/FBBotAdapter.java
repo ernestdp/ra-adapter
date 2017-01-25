@@ -4,10 +4,12 @@ import co.aurasphere.botmill.fb.AbstractFbBot;
 import co.aurasphere.botmill.fb.FbBotMillContext;
 import co.aurasphere.botmill.fb.autoreply.MessageAutoReply;
 import co.aurasphere.botmill.fb.event.message.MessageEvent;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by ernest8 on 19/01/2017.
  */
+@Component
 public class FBBotAdapter extends AbstractFbBot {
 
         public void defineBehavior() {
