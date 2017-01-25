@@ -57,12 +57,14 @@ public class USBCommAdapter implements SerialPortEventListener {
             }
         }
         if (!portFound)
-            throw new IOException("port " + port + " not found.");
+           // throw new IOException("port " + port + " not found.");
         connect();
     }
 
     public void connect() throws IOException {
         try {
+            if(portId!=null)
+            {
             log.info("USB port opening...");
             serialPort = (SerialPort) portId.open(this.getClass().getName(), portTimeout);
             log.info("USB port opened");
@@ -77,6 +79,7 @@ public class USBCommAdapter implements SerialPortEventListener {
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
             serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new IOException(e.getMessage());

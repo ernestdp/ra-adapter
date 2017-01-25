@@ -21,10 +21,9 @@ public class SlackCubeBot extends Bot {
 
 
 
-    @Controller(events = EventType.USER_TYPING)
-    public void onReceiveDirectMessage(WebSocketSession session, Event event) {
+    @Controller(events = {EventType.DIRECT_MESSAGE,EventType.DIRECT_MENTION})
+    public void onReceiveMessage(WebSocketSession session, Event event) {
         final String text = event.getText();
-        System.out.println(text);
         reply(session, event, new Message("Ja ok lekker."));
     }
 
