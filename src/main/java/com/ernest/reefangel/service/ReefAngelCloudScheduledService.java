@@ -29,21 +29,19 @@ public class ReefAngelCloudScheduledService {
     private CloudCommandService cloudCommandService;
     private RestTemplate restTemplate;
     private Logger log;
-    private String id;
 
     @Autowired
-    public ReefAngelCloudScheduledService(CloudCommandService cloudCommandService, RestTemplate restTemplate, @Value("${reefangel.id}") String id) {
+    public ReefAngelCloudScheduledService(CloudCommandService cloudCommandService, RestTemplate restTemplate) {
         this.cloudCommandService = cloudCommandService;
         this.restTemplate = restTemplate;
-        this.id = id;
         this.log = Logger.getLogger(ReefAngelCloudScheduledService.class);
     }
 
-    @Scheduled(cron = "0 0/60 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void uploadStatusToPortal() throws URISyntaxException, IOException, InterruptedException {
         final RA ra = cloudCommandService.statusAll();
         final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add(ID, id);
+        params.add(ID, ra.getId());
         params.add(T1, ra.getTemp1());
         params.add(T2, ra.getTemp2());
         params.add(T3, ra.getTemp3());

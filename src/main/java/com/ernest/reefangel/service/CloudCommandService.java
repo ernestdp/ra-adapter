@@ -26,6 +26,26 @@ public class CloudCommandService {
         this.log = Logger.getLogger(CloudCommandService.class);
     }
 
+
+    public RA statusAll() throws IOException, InterruptedException {
+        usbCommAdapter.receivedBytes.clear();
+        usbCommAdapter.write(new String("GET /sa ").getBytes("UTF-8"));
+        final byte[] bytes = new byte[1024];
+        int i = 0;
+        while (true) {
+            final Byte take = usbCommAdapter.receivedBytes.take();
+            bytes[++i] = take;
+            String s = new String(bytes);
+            if (s.trim().contains("<RA>") && s.trim().contains(("</RA>"))) {
+                String substring = s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>")) + 5);
+                System.out.println(substring);
+                ObjectMapper mapper = new XmlMapper();
+                final RA ra = mapper.readValue(substring, RA.class);
+                return ra;
+            }
+        }
+    }
+
     public String command(String command) throws IOException, InterruptedException {
         log.info(String.format("About to submit : %s to device.", command));
         usbCommAdapter.receivedBytes.clear();
