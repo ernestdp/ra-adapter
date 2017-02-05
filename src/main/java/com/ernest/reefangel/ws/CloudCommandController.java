@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Created by ernest on 2017/01/07.
  */
 @RestController
+@RequestMapping(path = "/ra")
 public class CloudCommandController {
 
 
@@ -47,6 +50,9 @@ public class CloudCommandController {
     public String welcome() throws IOException, InterruptedException {
         return "<h1>Reef Angel Controller Web Server</h1>";
     }
+
+
+
 
 
 }
