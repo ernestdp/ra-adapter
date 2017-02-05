@@ -43,8 +43,6 @@ public class RA {
     private String af;
     @JsonProperty(SF)
     private String sf;
-    @JsonProperty(PHE)
-    private String phe;
     @JsonProperty(WL)
     private String waterLevel;
 
@@ -114,10 +112,6 @@ public class RA {
 
     public String getSf() {
         return sf;
-    }
-
-    public String getPhe() {
-        return phe;
     }
 
     public String getWaterLevel() {

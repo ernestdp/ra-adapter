@@ -43,7 +43,7 @@ public class ReefAngelCloudScheduledService {
     public void uploadStatusToPortal() throws URISyntaxException, IOException, InterruptedException {
         final RA ra = cloudCommandService.statusAll();
         final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add(ID, id);
+        params.add(ID, ra.getId());
         params.add(T1, ra.getTemp1());
         params.add(T2, ra.getTemp2());
         params.add(T3, ra.getTemp3());
@@ -55,13 +55,13 @@ public class ReefAngelCloudScheduledService {
         params.add(EM, ra.getEm());
         params.add(EM1, ra.getEm1());
         params.add(PH, ra.getPh());
-        params.add(PHE, ra.getPhe());
         params.add(SF, ra.getSf());
         params.add(REM, ra.getRem());
         params.add(RON, ra.getRelayOn());
         params.add(ROFF, ra.getRelayOFF());
         final URI uri = UriComponentsBuilder.fromHttpUrl("http://forum.reefangel.com/status/submitp.aspx").queryParams(params).build().toUri();
         final RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, uri);
+        log.info(uri.toString());
         final ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
         log.info(String.format("reefangel updated remote response :  %s %s", exchange.getStatusCode(), exchange.getBody()));
     }
