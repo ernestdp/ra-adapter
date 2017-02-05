@@ -102,9 +102,11 @@ public class USBCommAdapter implements SerialPortEventListener {
     public void serialEvent(SerialPortEvent event) {
         if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             byte received = -1;
+
             do {
                 try {
                     received = (byte) inputStream.read();
+
                 } catch (IOException e) {
                     log.error("Error reading USB:" + e.getMessage());
                 }
