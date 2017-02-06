@@ -38,7 +38,7 @@ public class CloudCommandService {
             String s = new String(bytes);
             if (s.trim().contains("<RA>") && s.trim().contains(("</RA>"))) {
                 String substring = s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>")) + 5);
-                System.out.println(substring);
+                log.info(substring);
                 ObjectMapper mapper = new XmlMapper();
                 final RA ra = mapper.readValue(substring, RA.class);
                 return ra;

@@ -1,6 +1,7 @@
 package com.ernest.reefangel.slack;
 
 import com.ernest.reefangel.service.FeedbackService;
+import com.ernest.reefangel.service.feedback.FeedBackDelegate;
 import me.ramswaroop.jbot.core.slack.Bot;
 import me.ramswaroop.jbot.core.slack.Controller;
 import me.ramswaroop.jbot.core.slack.EventType;
@@ -23,16 +24,16 @@ public class SlackCubeBot extends Bot {
     @Value("${slackBotToken}")
     private String token;
 
-    private FeedbackService feedbackService;
+    private FeedBackDelegate feedBackDelegate;
 
     @Autowired
-    public SlackCubeBot(FeedbackService feedbackService){
-        this.feedbackService=feedbackService;
+    public SlackCubeBot(FeedBackDelegate feedBackDelegate){
+        this.feedBackDelegate = feedBackDelegate;
     }
 
     @Controller(events = {EventType.DIRECT_MESSAGE})
     public void onReceiveMessage(WebSocketSession session, Event event) throws IOException, InterruptedException {
-        final String feedback = feedbackService.delegateFeedback(event.getText());
+        final String feedback = feedBackDelegate.answer(event.getText());
         reply(session, event, new Message(feedback));
     }
 
