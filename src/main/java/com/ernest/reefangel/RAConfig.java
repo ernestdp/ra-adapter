@@ -1,6 +1,5 @@
 package com.ernest.reefangel;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
