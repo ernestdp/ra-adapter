@@ -1,8 +1,6 @@
 package com.ernest.reefangel.service;
 
-import com.ernest.reefangel.domain.Fields;
-import com.ernest.reefangel.domain.RA;
-import com.ernest.reefangel.service.feedback.FeedBackDelegate;
+import com.ernest.reefangel.slack.feedback.FeedBackDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +15,7 @@ public class FeedbackService {
     private FeedBackDelegate feedBackDelegate;
 
     @Autowired
-    public FeedbackService(CloudCommandService cloudCommandService)
+    public FeedbackService(CommandService cloudCommandService)
     {
     }
 

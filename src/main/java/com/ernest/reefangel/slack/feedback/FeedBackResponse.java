@@ -1,27 +1,29 @@
-package com.ernest.reefangel.service.feedback;
+package com.ernest.reefangel.slack.feedback;
 
-import com.ernest.reefangel.service.CloudCommandService;
+import com.ernest.reefangel.service.CommandService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by ernest8 on 06/02/2017.
  */
-@Component
 public abstract class FeedBackResponse {
 
-    private FeedBackResponse feedBackResponseParent;
+    protected Logger log;
+    CommandService commandService;
 
     @Autowired
-    public FeedBackResponse(FeedBackResponse feedBackResponseParent) {
-        this.feedBackResponseParent = feedBackResponseParent;
+    public FeedBackResponse(CommandService commandService) {
+        this.commandService=commandService;
+        log= Logger.getLogger(this.getClass());
     }
 
     public String respond(String request) {
         if (isCondition(request)) {
             return defineResponseMessage(request);
         }
-        return null;
+        return "";
     }
 
     abstract boolean isCondition(String request);

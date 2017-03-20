@@ -1,7 +1,6 @@
 package com.ernest.reefangel.slack;
 
-import com.ernest.reefangel.service.FeedbackService;
-import com.ernest.reefangel.service.feedback.FeedBackDelegate;
+import com.ernest.reefangel.slack.feedback.FeedBackDelegate;
 import me.ramswaroop.jbot.core.slack.Bot;
 import me.ramswaroop.jbot.core.slack.Controller;
 import me.ramswaroop.jbot.core.slack.EventType;

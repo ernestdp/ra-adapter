@@ -3,7 +3,7 @@ package com.ernest.reefangel.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static com.ernest.reefangel.domain.Fields.*;
+import static com.ernest.reefangel.domain.Field.*;
 
 /**
  * Created by ernest on 2017/01/11.
@@ -45,6 +45,9 @@ public class RA {
     private String sf;
     @JsonProperty(WL)
     private String waterLevel;
+    @JsonProperty(PHE)
+    private String phe;
+
 
     public RA() {
 
@@ -118,5 +121,8 @@ public class RA {
         return waterLevel;
     }
 
+    public String getPhe() {
+        return phe;
+    }
 }
 

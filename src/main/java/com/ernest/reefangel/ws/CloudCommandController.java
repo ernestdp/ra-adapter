@@ -1,7 +1,7 @@
 package com.ernest.reefangel.ws;
 
 import com.ernest.reefangel.domain.RA;
-import com.ernest.reefangel.service.CloudCommandService;
+import com.ernest.reefangel.service.CommandService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +19,12 @@ import java.net.URISyntaxException;
 public class CloudCommandController {
 
 
-    private CloudCommandService cloudCommandService;
+    private CommandService commandService;
     private Logger log;
 
     @Autowired
-    public CloudCommandController(CloudCommandService cloudCommandService) {
-        this.cloudCommandService = cloudCommandService;
+    public CloudCommandController(CommandService commandService) {
+        this.commandService = commandService;
         this.log = Logger.getLogger(CloudCommandController.class);
     }
 
@@ -32,14 +32,14 @@ public class CloudCommandController {
     @RequestMapping(path = "/status", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     @ResponseStatus(code = HttpStatus.OK)
     public RA statusAll() throws InterruptedException, IOException {
-        return cloudCommandService.statusAll();
+        return commandService.statusAll();
     }
 
 
     @RequestMapping(path = "/{command}", method = RequestMethod.GET)
     @ResponseStatus(code = HttpStatus.OK)
     public String command(@PathVariable String command) throws IOException, InterruptedException {
-        String response = cloudCommandService.command(command);
+        String response = commandService.command(command);
         log.info(response);
         return response;
     }

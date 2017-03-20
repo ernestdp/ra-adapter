@@ -14,16 +14,16 @@ import java.io.IOException;
  * Created by ernest on 2017/01/07.
  */
 @Service
-public class CloudCommandService {
+public class CommandService {
 
     private USBCommAdapter usbCommAdapter;
     private Logger log;
 
 
     @Autowired
-    public CloudCommandService(USBCommAdapter usbCommAdapter) {
+    public CommandService(USBCommAdapter usbCommAdapter) {
         this.usbCommAdapter = usbCommAdapter;
-        this.log = Logger.getLogger(CloudCommandService.class);
+        this.log = Logger.getLogger(CommandService.class);
     }
 
 
