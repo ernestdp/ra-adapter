@@ -1,6 +1,5 @@
 package com.ernest.reefangel;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,11 +10,8 @@ import org.springframework.web.client.RestTemplate;
 @Import(SwaggerConfig.class)
 public class RAConfig {
 
-@Bean
-    public RestTemplate restTemplate()
-    {
+    @Bean
+    public RestTemplate restTemplate() {
         return new RestTemplate();
-
     }
-
 }

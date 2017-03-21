@@ -3,7 +3,7 @@ package com.ernest.reefangel.domain;
 /**
  * Created by ernest on 2017/01/15.
  */
-public class Fields {
+public class Field {
     public static final String ID = "ID";
     public static final String T1 = "T1";
     public static final String T2 = "T2";

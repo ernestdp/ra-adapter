@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"me.ramswaroop.jbot","com.ernest.reefangel"})
 public class RaAdapterApplication {
 
 	public static void main(String[] args) {

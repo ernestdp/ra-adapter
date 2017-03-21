@@ -75,9 +75,9 @@
             <version>3.4</version>
         </dependency>
         <dependency>
-            <groupId>co.aurasphere.botmill</groupId>
-            <artifactId>fb-botmill</artifactId>
-            <version>1.1.0</version>
+            <groupId>me.ramswaroop.jbot</groupId>
+            <artifactId>jbot</artifactId>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>

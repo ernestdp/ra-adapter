@@ -14,16 +14,16 @@ import java.io.IOException;
  * Created by ernest on 2017/01/07.
  */
 @Service
-public class CloudCommandService {
+public class CommandService {
 
     private USBCommAdapter usbCommAdapter;
     private Logger log;
 
 
     @Autowired
-    public CloudCommandService(USBCommAdapter usbCommAdapter) {
+    public CommandService(USBCommAdapter usbCommAdapter) {
         this.usbCommAdapter = usbCommAdapter;
-        this.log = Logger.getLogger(CloudCommandService.class);
+        this.log = Logger.getLogger(CommandService.class);
     }
 
 
@@ -38,7 +38,7 @@ public class CloudCommandService {
             String s = new String(bytes);
             if (s.trim().contains("<RA>") && s.trim().contains(("</RA>"))) {
                 String substring = s.substring(s.indexOf("<RA>"), (s.lastIndexOf("</RA>")) + 5);
-                System.out.println(substring);
+                log.info(substring);
                 ObjectMapper mapper = new XmlMapper();
                 final RA ra = mapper.readValue(substring, RA.class);
                 return ra;
