@@ -17,19 +17,21 @@ import java.io.IOException;
 public class CommandService {
 
     private USBCommAdapter usbCommAdapter;
+    private RecordService recordService;
     private Logger log;
 
 
     @Autowired
-    public CommandService(USBCommAdapter usbCommAdapter) {
+    public CommandService(USBCommAdapter usbCommAdapter,RecordService recordService) {
         this.usbCommAdapter = usbCommAdapter;
+        this.recordService=recordService;
         this.log = Logger.getLogger(CommandService.class);
     }
 
 
     public RA statusAll() throws IOException, InterruptedException {
         usbCommAdapter.receivedBytes.clear();
-        usbCommAdapter.write(new String("GET /sa ").getBytes("UTF-8"));
+        usbCommAdapter.write(new String("GET /sr ").getBytes("UTF-8"));
         final byte[] bytes = new byte[1024];
         int i = 0;
         while (true) {
@@ -41,6 +43,7 @@ public class CommandService {
                 log.info(substring);
                 ObjectMapper mapper = new XmlMapper();
                 final RA ra = mapper.readValue(substring, RA.class);
+                recordService.save(ra);
                 return ra;
             }
         }

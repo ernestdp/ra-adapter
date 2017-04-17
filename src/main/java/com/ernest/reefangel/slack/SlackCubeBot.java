@@ -36,7 +36,6 @@ public class SlackCubeBot extends Bot {
         reply(session, event, new Message(feedback));
     }
 
-
     @Override
     public String getSlackToken() {
         return token;

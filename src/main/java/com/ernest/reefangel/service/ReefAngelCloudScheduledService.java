@@ -39,7 +39,7 @@ public class ReefAngelCloudScheduledService {
         this.log = Logger.getLogger(ReefAngelCloudScheduledService.class);
     }
 
-    @Scheduled(cron = "0 0/60 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void uploadStatusToPortal() throws URISyntaxException, IOException, InterruptedException {
         final RA ra = cloudCommandService.statusAll();
         final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();

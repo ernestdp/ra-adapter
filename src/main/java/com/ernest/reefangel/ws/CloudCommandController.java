@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
  * Created by ernest on 2017/01/07.
  */
 @RestController
-@RequestMapping(path = "/ra")
+@RequestMapping(path = "/")
 public class CloudCommandController {
 
 

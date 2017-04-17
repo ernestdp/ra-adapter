@@ -1,6 +1,5 @@
 package com.ernest.reefangel.slack.feedback;
 
-import com.ernest.reefangel.domain.Command;
 import com.ernest.reefangel.domain.Port;
 import com.ernest.reefangel.domain.PortMappings;
 import com.ernest.reefangel.service.CommandService;
@@ -15,15 +14,15 @@ import java.util.Map;
  */
 @Service
 @Primary
-public class StopResponse extends FeedBackResponse {
+public class StartResponse extends FeedBackResponse {
 
-    public StopResponse(CommandService commandService) {
+    public StartResponse(CommandService commandService) {
         super(commandService);
     }
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("stop");
+        return request.trim().toLowerCase().contains("start");
     }
 
     @Override
@@ -36,7 +35,7 @@ public class StopResponse extends FeedBackResponse {
                 label=s;
                 Port port = ports.get(label);
                 try {
-                    commandService.command("/r"+port.getNo()+"0");
+                    commandService.command("/r"+port.getNo()+"1");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -44,6 +43,6 @@ public class StopResponse extends FeedBackResponse {
                 }
             }
         }
-        return "ok stopped "+label;
+        return "ok started "+label;
     }
 }
