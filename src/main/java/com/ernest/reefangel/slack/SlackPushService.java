@@ -23,13 +23,12 @@ import static com.ernest.reefangel.domain.Field.ID;
 @Service
 public class SlackPushService {
 
-
     private RestTemplate slackApiTemplate;
 
     @Value("${slackChatPostUrl}")
     private String chatPostUrl;
 
-    @Value("${slackAccountToken}")
+    @Value("${slackBotToken}")
     private String token;
 
     @Value("${generalChannel}")

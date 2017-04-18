@@ -18,13 +18,15 @@ public class CommandService {
 
     private USBCommAdapter usbCommAdapter;
     private RecordService recordService;
+    private ValidateService validateService;
     private Logger log;
 
 
     @Autowired
-    public CommandService(USBCommAdapter usbCommAdapter,RecordService recordService) {
+    public CommandService(USBCommAdapter usbCommAdapter, RecordService recordService, ValidateService validateService) {
         this.usbCommAdapter = usbCommAdapter;
         this.recordService=recordService;
+        this.validateService = validateService;
         this.log = Logger.getLogger(CommandService.class);
     }
 
@@ -44,6 +46,7 @@ public class CommandService {
                 ObjectMapper mapper = new XmlMapper();
                 final RA ra = mapper.readValue(substring, RA.class);
                 recordService.save(ra);
+                validateService.validate(ra);
                 return ra;
             }
         }
