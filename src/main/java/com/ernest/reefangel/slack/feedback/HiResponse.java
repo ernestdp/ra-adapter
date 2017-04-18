@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 @Primary
 public class HiResponse extends FeedBackResponse {
 
-    @Autowired
-    private SlackFileUploadService slackFileUploadService;
 
     public HiResponse(CommandService commandService) {
         super(commandService);
@@ -27,7 +25,6 @@ public class HiResponse extends FeedBackResponse {
 
     @Override
     String defineResponseMessage(String request) {
-        slackFileUploadService.sendFile();
         return "Oh Hi. How can I help ?";
     }
 }

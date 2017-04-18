@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
@@ -36,9 +37,9 @@ public class SlackController {
     }
 
 
-    @RequestMapping(path = "/upload", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+    @RequestMapping(path = "/upload/{fileName}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     @ResponseStatus(code = HttpStatus.OK)
-    public void upload() throws InterruptedException, IOException {
-        slackFileUploadService.sendFile();
+    public void upload(@PathVariable String fileName) throws InterruptedException, IOException {
+        slackFileUploadService.sendFile(fileName);
     }
 }

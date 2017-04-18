@@ -15,6 +15,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
 import java.util.Date;
@@ -41,18 +42,14 @@ public class SlackFileUploadService {
         this.restTemplate=restTemplate;
     }
 
-    public void sendFile()
+    public void sendFile(String fileName)
     {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-
         LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("file", new FileSystemResource("/home/ernest/Pictures/fishies1.jpg"));
+        map.add("file", new FileSystemResource(fileName));
         map.add("token", userToken);
         map.add("channels",channel);
-
-
         HttpEntity<MultiValueMap<String, Object>> multiValueMapHttpEntity = new HttpEntity<>(map, headers);
         try {
             ResponseEntity<String> exchange = restTemplate.exchange("https://slack.com/api/files.upload", HttpMethod.POST, multiValueMapHttpEntity, String.class);
