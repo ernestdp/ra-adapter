@@ -1,7 +1,7 @@
 package com.ernest.reefangel.slack.feedback;
 
 import com.ernest.reefangel.service.CommandService;
-import com.ernest.reefangel.slack.SlackFileUploader;
+import com.ernest.reefangel.slack.SlackFileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class HiResponse extends FeedBackResponse {
 
     @Autowired
-    private SlackFileUploader slackFileUploader;
+    private SlackFileUploadService slackFileUploadService;
 
     public HiResponse(CommandService commandService) {
         super(commandService);
@@ -27,7 +27,7 @@ public class HiResponse extends FeedBackResponse {
 
     @Override
     String defineResponseMessage(String request) {
-        slackFileUploader.sendFile();
+        slackFileUploadService.sendFile();
         return "Oh Hi. How can I help ?";
     }
 }
