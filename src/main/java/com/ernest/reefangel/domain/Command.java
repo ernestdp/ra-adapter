@@ -16,6 +16,7 @@ public enum Command {
     boot,
     r,
     mb,
-    mi;
+    mi,
+    bp;
 }
 

@@ -1,6 +1,9 @@
 package com.ernest.reefangel.service;
 
 import com.ernest.reefangel.adapters.USBCommAdapter;
+import com.ernest.reefangel.domain.Port;
+import com.ernest.reefangel.domain.PortAlias;
+import com.ernest.reefangel.domain.PortMappings;
 import com.ernest.reefangel.domain.RA;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -9,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Map;
+
+import static com.ernest.reefangel.domain.PortAlias.valueOf;
 
 /**
  * Created by ernest on 2017/01/07.
@@ -79,4 +85,32 @@ public class CommandService {
             }
         }
     }
+
+    public boolean stop(String requestedPort) throws IOException, InterruptedException {
+        Map<PortAlias, Port> ports = PortMappings.getPorts();
+        String label=null;
+        PortAlias portAlias = PortAlias.valueOf(requestedPort);
+            if(ports.containsKey(portAlias))
+            {
+                Port port = ports.get(portAlias);
+                    command("r"+port.getNo()+"0");
+                    return true;
+            }
+        return false;
+    }
+
+    public boolean start(String requestedPort) throws IOException, InterruptedException {
+        Map<PortAlias, Port> ports = PortMappings.getPorts();
+        String label=null;
+        PortAlias portAlias = PortAlias.valueOf(requestedPort);
+        if(ports.containsKey(portAlias))
+        {
+            Port port = ports.get(portAlias);
+                command("r"+port.getNo()+"2");
+                return true;
+
+        }
+        return false;
+    }
+
 }

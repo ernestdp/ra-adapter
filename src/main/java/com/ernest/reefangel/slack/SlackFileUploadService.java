@@ -1,6 +1,7 @@
 package com.ernest.reefangel.slack;
 
 import com.sun.javafx.fxml.builder.URLBuilder;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -28,7 +29,7 @@ import java.util.Date;
 public class SlackFileUploadService {
 
 
-    @Value("${slackAccountToken}")
+    @Value("${slackBotToken}")
     private String userToken;
 
     @Value("${generalChannel}")
@@ -36,10 +37,14 @@ public class SlackFileUploadService {
 
     private RestTemplate restTemplate;
 
+    private Logger log;
+
     @Autowired
     public SlackFileUploadService(RestTemplate restTemplate)
     {
         this.restTemplate=restTemplate;
+        this.log = Logger.getLogger(SlackPushService.class);
+
     }
 
     public void sendFile(String fileName)
@@ -53,9 +58,9 @@ public class SlackFileUploadService {
         HttpEntity<MultiValueMap<String, Object>> multiValueMapHttpEntity = new HttpEntity<>(map, headers);
         try {
             ResponseEntity<String> exchange = restTemplate.exchange("https://slack.com/api/files.upload", HttpMethod.POST, multiValueMapHttpEntity, String.class);
-            System.out.println(exchange.getBody());
+            log.info(fileName + ", uploaded to slack : "+exchange.getStatusCode());
         }catch(HttpClientErrorException e) {
-            System.out.println("Document not found! Status code " + e.getStatusCode());
+            log.error(fileName + ", slack file upload failed : " + e.getMessage());
         }
     }
 }

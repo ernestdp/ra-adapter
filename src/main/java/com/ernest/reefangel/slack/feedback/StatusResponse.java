@@ -3,23 +3,9 @@ package com.ernest.reefangel.slack.feedback;
 import com.ernest.reefangel.StatusUtil;
 import com.ernest.reefangel.domain.RA;
 import com.ernest.reefangel.service.CommandService;
-import com.inamik.text.tables.Cell;
-import com.inamik.text.tables.GridTable;
-import com.inamik.text.tables.SimpleTable;
-import com.inamik.text.tables.grid.Border;
-import com.inamik.text.tables.grid.Util;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.inamik.text.tables.Cell.Functions.*;
 
 /**
  * Created by ernest8 on 06/02/2017.
@@ -35,7 +21,7 @@ public class StatusResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("status");
+        return request.trim().toLowerCase().contains("#status");
     }
 
     @Override

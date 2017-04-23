@@ -30,11 +30,11 @@ public class SlackCubeBot extends Bot {
         this.feedBackDelegate = feedBackDelegate;
     }
 
-    @Controller(events = {EventType.DIRECT_MESSAGE,EventType.DIRECT_MENTION})
+    @Controller(events = {EventType.DIRECT_MESSAGE,EventType.DIRECT_MENTION,EventType.MESSAGE})
     public void onReceiveMessage(WebSocketSession session, Event event) throws IOException, InterruptedException {
-        final String feedback = feedBackDelegate.answer(event.getText());
-        reply(session, event, new Message(feedback));
-    }
+            final String feedback = feedBackDelegate.answer(event.getText());
+            reply(session, event, new Message(feedback));
+        }
 
     @Override
     public String getSlackToken() {

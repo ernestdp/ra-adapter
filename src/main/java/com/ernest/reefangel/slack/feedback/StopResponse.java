@@ -2,6 +2,7 @@ package com.ernest.reefangel.slack.feedback;
 
 import com.ernest.reefangel.domain.Command;
 import com.ernest.reefangel.domain.Port;
+import com.ernest.reefangel.domain.PortAlias;
 import com.ernest.reefangel.domain.PortMappings;
 import com.ernest.reefangel.service.CommandService;
 import org.springframework.context.annotation.Primary;
@@ -23,27 +24,23 @@ public class StopResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("stop");
+        return request.trim().toLowerCase().contains("#stop");
     }
 
     @Override
     String defineResponseMessage(String request) {
-        Map<String, Port> ports = PortMappings.getPorts();
-        String label=null;
-        for (String s : ports.keySet()) {
-            if(request.toLowerCase().trim().contains(s))
+        for (PortAlias portAlias : PortAlias.values()) {
+            if(request.trim().contains(portAlias.name()))
             {
-                label=s;
-                Port port = ports.get(label);
                 try {
-                    commandService.command("/r"+port.getNo()+"0");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    commandService.stop(portAlias.name());
+                } catch (Exception e) {
+                    log.error(e);
+                    return String.format("Unable to take a capture image. %s. Try again buy typing 'snapshot'.", e.getMessage());
                 }
+                return String.format("Ok, stopped %s", portAlias.name());
             }
         }
-        return "ok stopped "+label;
+        return "Could not find the port to stop ";
     }
 }

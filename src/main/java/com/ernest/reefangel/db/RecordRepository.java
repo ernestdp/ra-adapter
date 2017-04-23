@@ -6,6 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by ernest on 2017/04/17.
@@ -13,4 +14,6 @@ import java.time.LocalDateTime;
 @RepositoryRestResource(collectionResourceRel = "records", path = "records")
 public interface RecordRepository extends MongoRepository<Record,LocalDateTime>
 {
+
+    List<Record> findTop3BycaptureDate();
 }

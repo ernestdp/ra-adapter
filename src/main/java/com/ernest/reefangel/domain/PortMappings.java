@@ -8,10 +8,10 @@ import java.util.Map;
  */
 public class PortMappings {
 
-    static Map<String,Port> ports = new HashMap<>();
+    static Map<PortAlias,Port> ports = new HashMap<>();
 
 
-    public static Map<String,Port> getPorts()
+    public static Map<PortAlias,Port> getPorts()
     {
         if(ports.size()<=0)
         {
@@ -41,14 +41,14 @@ public class PortMappings {
  */
     public  static void buildPorts()
     {
-        ports.put("wavemaker",new Port("1",null));
-        ports.put("chillerpump",new Port("2",null));
-        ports.put("skimmer",new Port("3",null));
-        ports.put("sumplight",new Port("4",null));
-        ports.put("heater",new Port("5",null));
-        ports.put("returnpump",new Port("6",null));
-        ports.put("chiller",new Port("7",null));
-        ports.put("atu",new Port("8",null));
+        ports.put(PortAlias.wavemaker,new Port("1",null));
+        ports.put(PortAlias.chillerpump,new Port("2",null));
+        ports.put(PortAlias.skimmer,new Port("3",null));
+        ports.put(PortAlias.sumplight,new Port("4",null));
+        ports.put(PortAlias.heater,new Port("5",null));
+        ports.put(PortAlias.returnpump,new Port("6",null));
+        ports.put(PortAlias.chiller,new Port("7",null));
+        ports.put(PortAlias.atu,new Port("8",null));
     }
 
 }

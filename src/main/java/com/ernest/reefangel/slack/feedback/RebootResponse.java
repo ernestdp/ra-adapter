@@ -18,25 +18,26 @@ import java.util.Map;
 @Primary
 public class RebootResponse extends FeedBackResponse {
 
+
+
     public RebootResponse(CommandService commandService) {
         super(commandService);
     }
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("reboot");
+        return request.trim().toLowerCase().contains("#reboot");
     }
 
     @Override
     String defineResponseMessage(String request) {
         try {
-            Process p = Runtime.getRuntime().exec("");
-            p.waitFor();
-
-        } catch (Exception e) {
-            log.error("Unable to reboot "+e,e);
-            return "Unable to reboot. "+e;
+            commandService.command("boot");
+        } catch (IOException e) {
+            return e.getMessage();
+        } catch (InterruptedException e) {
+            return e.getMessage();
         }
-        return "Rebooting, standby....";
+        return "Rebooting controller, standby....";
     }
 }

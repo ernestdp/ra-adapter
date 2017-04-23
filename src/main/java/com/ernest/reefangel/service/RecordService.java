@@ -11,6 +11,7 @@ import com.mongodb.util.JSON;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -51,5 +52,11 @@ public class RecordService {
     {
         return recordRepository.findAll();
     }
+
+    public List<Record> retrieveTopPh()
+    {
+        return recordRepository.findAll();
+    }
+
 
 }

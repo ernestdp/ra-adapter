@@ -1,6 +1,8 @@
 package com.ernest.reefangel.slack.feedback;
 
 import com.ernest.reefangel.db.entity.Record;
+import com.ernest.reefangel.domain.Command;
+import com.ernest.reefangel.domain.PortAlias;
 import com.ernest.reefangel.service.CommandService;
 import com.ernest.reefangel.service.PhotoService;
 import com.ernest.reefangel.service.RecordService;
@@ -16,32 +18,33 @@ import java.util.List;
  */
 @Service
 @Primary
-public class SnapshotResponse extends FeedBackResponse {
+public class TankSnapshotResponse extends FeedBackResponse {
 
     @Autowired
     PhotoService photoService;
 
-    public SnapshotResponse(CommandService commandService){
+    public TankSnapshotResponse(CommandService commandService){
         super(commandService);
     }
 
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("photo")
-                ||request.trim().toLowerCase().contains("pic")
-                ||request.toLowerCase().trim().contains("image")
-                ||request.trim().toLowerCase().contains("snapshot")
-                ||request.trim().toLowerCase().contains("see");
+        return request.trim().toLowerCase().contains("#coralpic");
     }
 
     @Override
     String defineResponseMessage(String request) {
         try {
+            commandService.start(PortAlias.sumplight.name());
+            commandService.command(Command.mf.name());
+            Thread.sleep(60000);//wait for water to clear
             photoService.snapshot();
-        } catch (IOException e) {
+            Thread.sleep(30000);//wait for water to clear
+            commandService.command(Command.bp.name());
+        } catch (Exception e) {
             log.error(e);
-            return String.format("Unable to take a capture image. %s. Try again buy typing 'snapshot'.", e);
+            return String.format("Unable to take a capture image or executing water change command. %s. Try again buy typing 'snapshot'.", e.getMessage());
         }
         return "See attached file/s.";
     }
