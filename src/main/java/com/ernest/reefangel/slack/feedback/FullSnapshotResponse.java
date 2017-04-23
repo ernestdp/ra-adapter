@@ -1,5 +1,6 @@
 package com.ernest.reefangel.slack.feedback;
 
+import com.ernest.reefangel.domain.FeedbackOptions;
 import com.ernest.reefangel.domain.PortAlias;
 import com.ernest.reefangel.service.CommandService;
 import com.ernest.reefangel.service.PhotoService;
@@ -8,6 +9,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+
+import static com.ernest.reefangel.domain.FeedbackOptions.*;
 
 /**
  * Created by ernest8 on 06/02/2017.
@@ -26,7 +29,7 @@ public class FullSnapshotResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("#pic");
+        return request.trim().toLowerCase().contains("#"+ pic.name());
     }
 
     @Override
@@ -36,7 +39,6 @@ public class FullSnapshotResponse extends FeedBackResponse {
             Thread.sleep(10000);
             photoService.snapshot();
             Thread.sleep(10000);
-            commandService.stop(PortAlias.sumplight.name());
         } catch (Exception e) {
             log.error(e);
             return String.format("Unable to take a capture image. %s. Try again buy typing 'snapshot'.", e.getMessage());

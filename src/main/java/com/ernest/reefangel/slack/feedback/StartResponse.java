@@ -1,5 +1,6 @@
 package com.ernest.reefangel.slack.feedback;
 
+import com.ernest.reefangel.domain.FeedbackOptions;
 import com.ernest.reefangel.domain.Port;
 import com.ernest.reefangel.domain.PortAlias;
 import com.ernest.reefangel.domain.PortMappings;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Map;
+
+import static com.ernest.reefangel.domain.FeedbackOptions.*;
 
 /**
  * Created by ernest8 on 06/02/2017.
@@ -23,7 +26,7 @@ public class StartResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("#start");
+        return request.trim().toLowerCase().contains("#"+ start.name());
     }
 
     @Override
@@ -35,11 +38,20 @@ public class StartResponse extends FeedBackResponse {
                     commandService.start(portAlias.name());
                 } catch (Exception e) {
                     log.error(e);
-                    return String.format("Unable to take a capture image. %s. Try again buy typing 'snapshot'.", e.getMessage());
+                    return String.format("%s %s ", error(), e.getMessage());
                 }
                 return String.format("Ok, started %s", portAlias.name());
             }
         }
-        return "Could not find the port to start ";
+
+    return error();
+    }
+
+    private String error(){
+        final StringBuffer buffer = new StringBuffer("Could not find the port to start. Remember to type start and one of the following ports. \n ");
+        for (PortAlias portAlias : PortAlias.values()) {
+            buffer.append("`"+ portAlias.name() + "` ");
+        }
+        return buffer.toString();
     }
 }

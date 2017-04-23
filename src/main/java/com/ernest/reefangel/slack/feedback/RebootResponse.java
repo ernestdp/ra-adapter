@@ -1,5 +1,6 @@
 package com.ernest.reefangel.slack.feedback;
 
+import com.ernest.reefangel.domain.FeedbackOptions;
 import com.ernest.reefangel.domain.Port;
 import com.ernest.reefangel.domain.PortMappings;
 import com.ernest.reefangel.service.CommandService;
@@ -26,7 +27,7 @@ public class RebootResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("#reboot");
+        return request.trim().toLowerCase().contains("#"+ FeedbackOptions.reboot.name());
     }
 
     @Override

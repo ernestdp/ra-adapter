@@ -1,6 +1,7 @@
 package com.ernest.reefangel.slack.feedback;
 
 import com.ernest.reefangel.db.entity.Record;
+import com.ernest.reefangel.domain.FeedbackOptions;
 import com.ernest.reefangel.service.CommandService;
 import com.ernest.reefangel.service.PdfService;
 import com.ernest.reefangel.service.RecordService;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static com.ernest.reefangel.domain.FeedbackOptions.*;
 
 /**
  * Created by ernest8 on 06/02/2017.
@@ -36,7 +39,7 @@ public class FullPHHistoryResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("#ph");
+        return request.trim().toLowerCase().contains("#"+ ph.name());
     }
 
     @Override

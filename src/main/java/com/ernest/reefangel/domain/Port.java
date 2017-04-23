@@ -29,4 +29,29 @@ public class Port {
         this.status = status;
     }
 
+    public static String portPretty(short result)
+    {
+        if(0==result)
+        {
+            return "Off";
+        }else if(1==result)
+        {
+            return "On";
+        }else if(2==result)
+        {
+            return "Auto";
+        }
+        return "Uknown";
+    }
+
+
+    public static String portONPretty(boolean result)
+    {
+        if(Boolean.TRUE.equals(result))
+        {
+            return "On";
+        }else{
+            return "Off";
+        }
+    }
 }

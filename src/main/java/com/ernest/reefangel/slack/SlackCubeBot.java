@@ -25,9 +25,14 @@ public class SlackCubeBot extends Bot {
 
     private FeedBackDelegate feedBackDelegate;
 
+    private SlackPushService slackPushService;
+
+
     @Autowired
-    public SlackCubeBot(FeedBackDelegate feedBackDelegate){
+    public SlackCubeBot(FeedBackDelegate feedBackDelegate,SlackPushService slackPushService){
         this.feedBackDelegate = feedBackDelegate;
+        this.slackPushService = slackPushService;
+        slackPushService.send("I'm back. Something restarted me..");
     }
 
     @Controller(events = {EventType.DIRECT_MESSAGE,EventType.DIRECT_MENTION,EventType.MESSAGE})

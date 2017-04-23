@@ -1,10 +1,14 @@
 package com.ernest.reefangel.slack.feedback;
 
-import com.ernest.reefangel.StatusUtil;
-import com.ernest.reefangel.domain.RA;
+import com.ernest.reefangel.domain.Status;
+import com.ernest.reefangel.domain.*;
 import com.ernest.reefangel.service.CommandService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+
+import static com.ernest.reefangel.domain.FeedbackOptions.status;
 
 
 /**
@@ -21,7 +25,7 @@ public class StatusResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("#status");
+        return request.trim().toLowerCase().contains("#"+ status.name());
     }
 
     @Override
@@ -34,13 +38,26 @@ public class StatusResponse extends FeedBackResponse {
                     .append("\n|#Temprature = ")
                     .append("`"+ra.getTemp1()+"`")
                     .append("\n|#ATO High = ")
-                    .append("`"+StatusUtil.atoPretty(ra.getAtoHIGH())+"`")
+                    .append("`"+ Status.atoPretty(ra.getAtoHIGH())+"`")
                     .append("\n|#ATO Low = ")
-                    .append("`"+StatusUtil.atoPretty(ra.getAtoLOW())+"`")
-                    .append("\n|#Relay on = ")
-                    .append("`"+ra.getR()+"`")
-                    .append("\n|#Relay Off = ")
-                    .append("`"+ra.getRelayOFF()+"`");
+                    .append("`"+ Status.atoPretty(ra.getAtoLOW())+"`");
+
+            //RELAY stuff
+            Relay relay = new Relay();
+            relay.setRelayData(Short.valueOf(ra.getR()),Short.valueOf(ra.getRelayOn()),Short.valueOf(ra.getRelayOFF()));
+            final Map<PortAlias, Port> ports = PortMappings.getPorts();
+            builder.append("\n Relay : ");
+            for (Map.Entry<PortAlias, Port> port : ports.entrySet()) {
+                Port portValue = port.getValue();
+                short portStatus = relay.getPortStatus(Short.valueOf(portValue.getNo()));
+                boolean on = relay.isPortOn(Integer.valueOf(portValue.getNo()),true);
+
+                builder.append("\n|#")
+                .append(port.getKey().name())
+                .append(" = ")
+                .append("`"+Port.portPretty(portStatus)+"` ")
+                .append(" | `"+Port.portONPretty(on)+"`");
+            }
             return builder.toString();
         } catch (Exception e) {
             return "aaa I'm experiencing a communication error. Would you like to try again?"+e.getMessage();

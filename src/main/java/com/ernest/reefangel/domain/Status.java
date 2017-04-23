@@ -1,9 +1,9 @@
-package com.ernest.reefangel;
+package com.ernest.reefangel.domain;
 
 /**
  * Created by ernest on 2017/03/25.
  */
-public class StatusUtil {
+public class Status {
 
     public static String atoPretty(String result)
     {

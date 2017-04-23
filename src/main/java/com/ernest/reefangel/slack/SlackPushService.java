@@ -41,7 +41,6 @@ public class SlackPushService {
     {
         this.slackApiTemplate=slackApiTemplate;
         this.log = Logger.getLogger(SlackPushService.class);
-
     }
 
     public void send(String message)

@@ -1,15 +1,14 @@
 package com.ernest.reefangel.slack.feedback;
 
-import com.ernest.reefangel.domain.Command;
-import com.ernest.reefangel.domain.Port;
-import com.ernest.reefangel.domain.PortAlias;
-import com.ernest.reefangel.domain.PortMappings;
+import com.ernest.reefangel.domain.*;
 import com.ernest.reefangel.service.CommandService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Map;
+
+import static com.ernest.reefangel.domain.FeedbackOptions.*;
 
 /**
  * Created by ernest8 on 06/02/2017.
@@ -24,7 +23,7 @@ public class StopResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("#stop");
+        return request.trim().toLowerCase().contains("#"+ stop.name());
     }
 
     @Override
@@ -36,11 +35,19 @@ public class StopResponse extends FeedBackResponse {
                     commandService.stop(portAlias.name());
                 } catch (Exception e) {
                     log.error(e);
-                    return String.format("Unable to take a capture image. %s. Try again buy typing 'snapshot'.", e.getMessage());
+                    return String.format("%s %s ", error(), e.getMessage());
                 }
                 return String.format("Ok, stopped %s", portAlias.name());
             }
         }
-        return "Could not find the port to stop ";
+        return error();
+    }
+
+    private String error(){
+        final StringBuffer buffer = new StringBuffer("Could not find the port to stop. Remember to type stop and one of the following ports. \n ");
+        for (PortAlias portAlias : PortAlias.values()) {
+            buffer.append("`"+ portAlias.name() + "` ");
+        }
+        return buffer.toString();
     }
 }

@@ -2,6 +2,7 @@ package com.ernest.reefangel.slack.feedback;
 
 import com.ernest.reefangel.db.entity.Record;
 import com.ernest.reefangel.domain.Command;
+import com.ernest.reefangel.domain.FeedbackOptions;
 import com.ernest.reefangel.domain.PortAlias;
 import com.ernest.reefangel.service.CommandService;
 import com.ernest.reefangel.service.PhotoService;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+
+import static com.ernest.reefangel.domain.FeedbackOptions.coralpic;
 
 /**
  * Created by ernest8 on 06/02/2017.
@@ -30,7 +33,7 @@ public class TankSnapshotResponse extends FeedBackResponse {
 
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("#coralpic");
+        return request.trim().toLowerCase().contains("#"+ coralpic.name());
     }
 
     @Override
