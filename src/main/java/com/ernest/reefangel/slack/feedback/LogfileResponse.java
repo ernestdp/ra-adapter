@@ -11,20 +11,23 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Primary
-public class HiResponse extends FeedBackResponse {
+public class LogfileResponse extends FeedBackResponse {
 
-
-    public HiResponse(CommandService commandService) {
+    public LogfileResponse(CommandService commandService) {
         super(commandService);
     }
 
+    @Autowired
+    SlackFileUploadService fileUploadService;
+
     @Override
     boolean isCondition(String request) {
-        return request.trim().toLowerCase().contains("hi");
+        return request.trim().toLowerCase().contains("#log");
     }
 
     @Override
     String defineResponseMessage(String request) {
-        return "Oh Hi. How can I help ?";
+            fileUploadService.sendFile("/var/log/ra.log");
+            return "file attached....";
     }
 }
